@@ -1,49 +1,59 @@
-# Grúas Fernández — Landing Page
-
-Landing page responsive para **Grúas Fernández**, diseñada a partir del logo proporcionado.
-
-## Estructura
-
-```text
-gruas-fernandez-landing/
-├── index.html
-├── styles.css
-├── script.js
-├── README.md
-└── assets/
-    └── logo.png
-```
-
-## Publicar en GitHub Pages
-
-1. Crea un repositorio en GitHub, por ejemplo `gruas-fernandez`.
-2. Sube todos los archivos manteniendo la estructura de carpetas.
-3. En GitHub entra a **Settings → Pages**.
-4. En **Build and deployment**, selecciona:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. Guarda y espera a que GitHub genere la URL de Pages.
-
-## Antes de publicar
-
-Abre `script.js` y cambia:
-
-```js
+// ============================================================
+// GRÚAS FERNÁNDEZ — CONFIGURACIÓN
+// Cambia este correo por el correo real de la empresa.
+// ============================================================
 const COMPANY_EMAIL = "cotizaciones@tudominio.com";
-```
 
-por el correo real de Grúas Fernández.
+// Menú móvil
+const navToggle = document.querySelector(".nav-toggle");
+const navLinks = document.querySelector(".nav-links");
 
-El formulario no necesita backend: al enviarlo abre la aplicación de correo del visitante con el mensaje ya preparado.
+navToggle?.addEventListener("click", () => {
+  const open = navLinks.classList.toggle("open");
+  navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+});
 
-## Personalización
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => navLinks.classList.remove("open"));
+});
 
-- **Colores:** las variables principales están al inicio de `styles.css`.
-- **Logo:** reemplaza `assets/logo.png` por la versión definitiva si tienes una con mayor resolución.
-- **Textos:** edita directamente `index.html`.
-- **WhatsApp:** si posteriormente quieres un botón de WhatsApp, añade el número real de la empresa; no se ha inventado uno en esta plantilla.
+// Año automático
+document.getElementById("year").textContent = new Date().getFullYear();
 
-## Nota
+// Formulario de cotización: genera un correo listo para enviar.
+const form = document.getElementById("quoteForm");
+const status = document.getElementById("formStatus");
 
-La página está construida sin frameworks ni dependencias de Node, por lo que puede alojarse directamente como un sitio estático en GitHub Pages.
+form?.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const data = new FormData(form);
+  const name = data.get("name").trim();
+  const phone = data.get("phone").trim();
+  const service = data.get("service");
+  const message = data.get("message").trim();
+
+  if (!name || !phone || !service || !message) {
+    status.textContent = "Completa todos los campos para preparar la solicitud.";
+    return;
+  }
+
+  const subject = encodeURIComponent(`Solicitud de cotización — ${service}`);
+  const body = encodeURIComponent(
+`Hola, Grúas Fernández.
+
+Quiero solicitar una cotización.
+
+Nombre: ${name}
+Teléfono: ${phone}
+Servicio: ${service}
+
+Detalles del trabajo:
+${message}
+
+Enviado desde el sitio web de Grúas Fernández.`
+  );
+
+  window.location.href = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
+  status.textContent = "Abriendo tu aplicación de correo…";
+});
