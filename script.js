@@ -2,7 +2,7 @@
 // GRÚAS FERNÁNDEZ — CONFIGURACIÓN
 // Cambia este correo por el correo real de la empresa.
 // ============================================================
-const COMPANY_EMAIL = "cotizaciones@tudominio.com";
+const COMPANY_EMAIL = "gruas.fernandez2026@gmail.com";
 
 // Menú móvil
 const navToggle = document.querySelector(".nav-toggle");
