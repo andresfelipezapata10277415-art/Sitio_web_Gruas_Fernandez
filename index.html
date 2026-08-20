@@ -26,7 +26,7 @@
         <a href="#servicios">Servicios</a>
         <a href="#nosotros">Nosotros</a>
         <a href="#proceso">Cómo trabajamos</a>
-        <a href="#contacto" class="nav-cta">Cotizar</a>
+        <a href="#contacto" class="nav-cta">Agendar servicio</a>
       </div>
     </nav>
   </header>
@@ -46,7 +46,7 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#contacto">Solicitar cotización <span>↗</span></a>
+            <a class="btn btn-primary" href="#contacto">Agendar servicio <span>↗</span></a>
             <a class="btn btn-ghost" href="#servicios">Ver servicios</a>
           </div>
 
@@ -182,7 +182,7 @@
         <div class="quote-copy reveal">
           <p class="eyebrow"><span></span> HABLEMOS DE TU PROYECTO</p>
           <h2>¿Necesitas<br /><em>mover algo?</em></h2>
-          <p>Cuéntanos qué necesitas y prepara la información básica para recibir una cotización.</p>
+          <p>Cuéntanos qué necesitas y completa la información necesaria para registrar y agendar tu servicio.</p>
 
           <div class="contact-note">
             <span>GF</span>
@@ -193,7 +193,7 @@
           </div>
         </div>
 
-        <form class="quote-form reveal delay-1" id="quoteForm">
+        <form class="quote-form reveal delay-1" id="serviceForm">
           <label>
             Nombre
             <input type="text" name="name" placeholder="Tu nombre" required />
@@ -205,7 +205,7 @@
           </label>
 
           <label>
-            ¿Qué necesitas?
+            ¿Qué necesitas? <span class="required-mark">*</span>
             <select name="service" required>
               <option value="" selected disabled>Selecciona un servicio</option>
               <option>Servicio de grúa</option>
@@ -215,13 +215,39 @@
             </select>
           </label>
 
+          <div class="form-section-title">Datos del trabajo <span>* Campos obligatorios</span></div>
+
+          <div class="form-row">
+            <label>
+              Ubicación del servicio <span class="required-mark">*</span>
+              <input type="text" name="location" placeholder="Ciudad / dirección" required />
+            </label>
+
+            <label>
+              Tipo de carga <span class="required-mark">*</span>
+              <input type="text" name="loadType" placeholder="Ej. maquinaria, estructura, vehículo" required />
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>
+              Peso aproximado <span class="required-mark">*</span>
+              <input type="text" name="weight" placeholder="Ej. 2.5 toneladas" required />
+            </label>
+
+            <label>
+              Fecha requerida <span class="required-mark">*</span>
+              <input type="date" name="date" required />
+            </label>
+          </div>
+
           <label>
-            Cuéntanos sobre el trabajo
-            <textarea name="message" rows="4" placeholder="Ubicación, tipo de carga, fecha aproximada..." required></textarea>
+            Detalles adicionales <span class="optional-mark">(Opcional)</span>
+            <textarea name="message" rows="4" placeholder="Describe brevemente la maniobra o cualquier condición importante del trabajo..."></textarea>
           </label>
 
-          <button class="btn btn-primary form-button" type="submit">Preparar solicitud <span>↗</span></button>
-          <p class="form-help">El botón abrirá tu aplicación de correo con la solicitud preparada. Configura el correo de destino en <code>script.js</code>.</p>
+          <button class="btn btn-primary form-button" type="submit">Registrar servicio <span>↗</span></button>
+          <p class="form-help">El botón abrirá tu aplicación de correo con el registro del servicio preparado. Configura el correo de destino en <code>script.js</code>.</p>
           <p class="form-status" id="formStatus" role="status"></p>
         </form>
       </div>
@@ -238,7 +264,7 @@
       <div class="footer-links">
         <a href="#servicios">Servicios</a>
         <a href="#nosotros">Nosotros</a>
-        <a href="#contacto">Cotizar</a>
+        <a href="#contacto">Agendar servicio</a>
       </div>
     </div>
     <div class="container copyright">© <span id="year"></span> Grúas Fernández. Todos los derechos reservados.</div>
