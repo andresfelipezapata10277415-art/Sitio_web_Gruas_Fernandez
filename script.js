@@ -44,3 +44,21 @@ Enviado desde el sitio web de Grúas Fernández.`
   status.textContent = "Abriendo tu aplicación de correo…";
   window.location.href = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
 });
+
+
+// Navegación de los botones principales y enlaces internos.
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (event) => {
+    const targetId = link.getAttribute("href");
+    const target = document.querySelector(targetId);
+
+    if (!target) return;
+
+    event.preventDefault();
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // Cierra el menú móvil si está abierto.
+    links?.classList.remove("open");
+    menu?.setAttribute("aria-expanded", "false");
+  });
+});
