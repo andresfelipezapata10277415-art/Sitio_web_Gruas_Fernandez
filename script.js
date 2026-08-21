@@ -2,70 +2,64 @@ const COMPANY_EMAIL = "gruas.fernandez2026@gmail.com";
 
 const menu = document.querySelector(".menu");
 const links = document.querySelector(".links");
+menu?.addEventListener("click",()=>{const open=links.classList.toggle("open");menu.setAttribute("aria-expanded",open?"true":"false")});
+document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener("click",e=>{const target=document.querySelector(link.getAttribute("href"));if(!target)return;e.preventDefault();target.scrollIntoView({behavior:"smooth"});links?.classList.remove("open")}));
+document.getElementById("year").textContent=new Date().getFullYear();
 
-menu?.addEventListener("click", () => {
-  const open = links.classList.toggle("open");
-  menu.setAttribute("aria-expanded", open ? "true" : "false");
-});
+const form=document.getElementById("serviceForm");
+const status=document.getElementById("status");
+const modal=document.getElementById("emailModal");
 
-document.querySelectorAll(".links a").forEach(a => {
-  a.addEventListener("click", () => links.classList.remove("open"));
-});
-
-document.getElementById("year").textContent = new Date().getFullYear();
-
-const form = document.getElementById("serviceForm");
-const status = document.getElementById("status");
-
-form?.addEventListener("submit", (event) => {
+form?.addEventListener("submit",event=>{
   event.preventDefault();
-  const data = new FormData(form);
-
-  const details = (data.get("details") || "").trim() || "Sin detalles adicionales.";
-
-  const subject = encodeURIComponent(`Registro de servicio — ${data.get("service")}`);
-  const body = encodeURIComponent(
-`Hola, Grúas Fernández.
+  if(!form.checkValidity()){form.reportValidity();return}
+  const d=new FormData(form);
+  const details=(d.get("details")||"").trim()||"Sin detalles adicionales.";
+  const subject=`Registro de servicio — ${d.get("service")}`;
+  const body=`Hola, Grúas Fernández.
 
 Quiero registrar y agendar un servicio.
 
-Nombre: ${data.get("name")}
-Teléfono: ${data.get("phone")}
-Servicio: ${data.get("service")}
-Ubicación: ${data.get("location")}
-Tipo de carga: ${data.get("load")}
-Peso aproximado: ${data.get("weight")}
-Fecha requerida: ${data.get("date")}
-Detalles adicionales: ${details}
+Nombre: ${d.get("name")}
+Teléfono: ${d.get("phone")}
+Servicio: ${d.get("service")}
+Ubicación: ${d.get("location")}
+Tipo de carga: ${d.get("load")}
+Peso aproximado: ${d.get("weight")}
+Fecha requerida: ${d.get("date")}
 
-Enviado desde el sitio web de Grúas Fernández.`
-  );
+Detalles adicionales:
+${details}
 
-  status.textContent = "Abriendo Gmail con el registro preparado…";
+Enviado desde el sitio web de Grúas Fernández.`;
 
-  const gmailUrl =
-    `https://mail.google.com/mail/?view=cm&fs=1` +
-    `&to=${encodeURIComponent(COMPANY_EMAIL)}` +
-    `&su=${subject}` +
-    `&body=${body}`;
-
-  window.location.href = gmailUrl;
+  window.serviceEmail={subject:encodeURIComponent(subject),body:encodeURIComponent(body)};
+  status.textContent="Elige Gmail u Outlook para continuar.";
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+  document.body.classList.add("modal-open");
 });
 
+function closeModal(){modal.classList.remove("open");modal.setAttribute("aria-hidden","true");document.body.classList.remove("modal-open")}
+document.querySelectorAll("[data-close]").forEach(el=>el.addEventListener("click",closeModal));
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 
-// Navegación de los botones principales y enlaces internos.
-document.querySelectorAll('a[href^="#"]').forEach((link) => {
-  link.addEventListener("click", (event) => {
-    const targetId = link.getAttribute("href");
-    const target = document.querySelector(targetId);
+document.querySelectorAll("[data-target]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const email=window.serviceEmail;if(!email)return;
+    const to=encodeURIComponent(COMPANY_EMAIL);
+    const subject=email.subject, body=email.body;
+    const target=button.dataset.target;
 
-    if (!target) return;
-
-    event.preventDefault();
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    // Cierra el menú móvil si está abierto.
-    links?.classList.remove("open");
-    menu?.setAttribute("aria-expanded", "false");
+    if(target==="gmail-web"){
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,"_blank","noopener,noreferrer");
+    } else if(target==="outlook-web"){
+      window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${subject}&body=${body}`,"_blank","noopener,noreferrer");
+    } else if(target==="gmail-app"){
+      window.location.href=`googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
+    } else if(target==="outlook-app"){
+      window.location.href=`ms-outlook://compose?to=${to}&subject=${subject}&body=${body}`;
+    }
+    closeModal();
   });
 });
