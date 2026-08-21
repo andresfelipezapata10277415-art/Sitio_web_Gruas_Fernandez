@@ -6,6 +6,27 @@ menu?.addEventListener("click",()=>{const open=links.classList.toggle("open");me
 document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener("click",e=>{const target=document.querySelector(link.getAttribute("href"));if(!target)return;e.preventDefault();target.scrollIntoView({behavior:"smooth"});links?.classList.remove("open")}));
 document.getElementById("year").textContent=new Date().getFullYear();
 
+const loadCategory=document.getElementById("loadCategory");
+const vehicleFields=document.getElementById("vehicleFields");
+const vehicleType=document.getElementById("vehicleType");
+const vehiclePlate=document.getElementById("vehiclePlate");
+const vehicleBrandModel=document.getElementById("vehicleBrandModel");
+
+function updateLoadFields(){
+  const isVehicle=loadCategory?.value==="Vehículo";
+  if(vehicleFields) vehicleFields.hidden=!isVehicle;
+
+  [vehicleType,vehiclePlate,vehicleBrandModel].forEach(field=>{
+    if(field){
+      field.required=isVehicle;
+      if(!isVehicle) field.value="";
+    }
+  });
+}
+
+loadCategory?.addEventListener("change",updateLoadFields);
+updateLoadFields();
+
 const form=document.getElementById("serviceForm");
 const status=document.getElementById("status");
 const modal=document.getElementById("emailModal");
@@ -28,8 +49,11 @@ Ciudad/Municipio: ${d.get("city")}
 Dirección: ${d.get("address")}
 Barrio/Sector: ${d.get("neighborhood")}
 Puntos de referencia: ${(d.get("reference") || "").trim() || "No especificado"}
-Tipo de carga: ${d.get("load")}
-Peso aproximado: ${d.get("weight")}
+Tipo de carga: ${d.get("loadCategory")}
+${d.get("loadCategory")==="Vehículo" ? `Tipo de vehículo: ${d.get("vehicleType")}
+Placas del vehículo: ${d.get("vehiclePlate")}
+Marca y modelo: ${d.get("vehicleBrandModel")}
+` : ""}Peso aproximado: ${d.get("weight")}
 Fecha requerida: ${d.get("date")}
 
 Detalles adicionales:
