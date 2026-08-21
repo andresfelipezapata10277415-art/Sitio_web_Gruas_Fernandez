@@ -41,8 +41,15 @@ Detalles adicionales: ${details}
 Enviado desde el sitio web de Grúas Fernández.`
   );
 
-  status.textContent = "Abriendo tu aplicación de correo…";
-  window.location.href = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
+  status.textContent = "Abriendo Gmail con el registro preparado…";
+
+  const gmailUrl =
+    `https://mail.google.com/mail/?view=cm&fs=1` +
+    `&to=${encodeURIComponent(COMPANY_EMAIL)}` +
+    `&su=${subject}` +
+    `&body=${body}`;
+
+  window.location.href = gmailUrl;
 });
 
 
