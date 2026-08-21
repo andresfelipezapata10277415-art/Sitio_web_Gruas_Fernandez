@@ -23,7 +23,11 @@ Quiero registrar y agendar un servicio.
 Nombre: ${d.get("name")}
 Teléfono: ${d.get("phone")}
 Servicio: ${d.get("service")}
-Ubicación: ${d.get("location")}
+Ubicación del servicio:
+Ciudad/Municipio: ${d.get("city")}
+Dirección: ${d.get("address")}
+Barrio/Sector: ${d.get("neighborhood")}
+Puntos de referencia: ${(d.get("reference") || "").trim() || "No especificado"}
 Tipo de carga: ${d.get("load")}
 Peso aproximado: ${d.get("weight")}
 Fecha requerida: ${d.get("date")}

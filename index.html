@@ -85,7 +85,13 @@
       <label>Nombre *<input name="name" required placeholder="Tu nombre"></label>
       <label>Teléfono *<input name="phone" type="tel" required placeholder="Tu número"></label>
       <label>Servicio *<select name="service" required><option value="" disabled selected>Selecciona un servicio</option><option>Servicio de grúa</option><option>Izaje y maniobras</option><option>Carga y transporte</option><option>Otro / asesoría</option></select></label>
-      <label>Ubicación del servicio *<input name="location" required placeholder="Ciudad, dirección o zona"></label>
+      <div class="location-fields">
+        <p class="form-group-title">Ubicación del servicio</p>
+        <label>Ciudad/Municipio *<input name="city" required placeholder="Ciudad o municipio"></label>
+        <label>Dirección *<input name="address" required placeholder="Calle, carrera, número, etc."></label>
+        <label>Barrio/Sector *<input name="neighborhood" required placeholder="Barrio o sector"></label>
+        <label>Puntos de referencia <em>(Opcional)</em><input name="reference" placeholder="Ej. frente al parque, junto a la estación..."></label>
+      </div>
       <label>Tipo de carga *<input name="load" required placeholder="¿Qué se necesita mover?"></label>
       <label>Peso aproximado *<input name="weight" required placeholder="Ej. 2 toneladas"></label>
       <label>Fecha requerida *<input name="date" type="date" required></label>
