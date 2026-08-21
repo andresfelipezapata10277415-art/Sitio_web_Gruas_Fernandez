@@ -182,7 +182,7 @@
         <div class="quote-copy reveal">
           <p class="eyebrow"><span></span> HABLEMOS DE TU PROYECTO</p>
           <h2>¿Necesitas<br /><em>mover algo?</em></h2>
-          <p>Cuéntanos qué necesitas y completa la información necesaria para registrar y agendar tu servicio.</p>
+          <p>Registra tu servicio y proporciona la información necesaria para que podamos coordinar la atención.</p>
 
           <div class="contact-note">
             <span>GF</span>
@@ -193,7 +193,7 @@
           </div>
         </div>
 
-        <form class="quote-form reveal delay-1" id="serviceForm">
+        <form class="quote-form reveal delay-1" id="quoteForm">
           <label>
             Nombre
             <input type="text" name="name" placeholder="Tu nombre" required />
@@ -247,7 +247,7 @@
           </label>
 
           <button class="btn btn-primary form-button" type="submit">Registrar servicio <span>↗</span></button>
-          <p class="form-help">El botón abrirá tu aplicación de correo con el registro del servicio preparado. Configura el correo de destino en <code>script.js</code>.</p>
+          <p class="form-help">El botón abrirá tu aplicación de correo con la solicitud preparada. Configura el correo de destino en <code>script.js</code>.</p>
           <p class="form-status" id="formStatus" role="status"></p>
         </form>
       </div>

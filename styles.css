@@ -20,8 +20,8 @@ document.querySelectorAll(".nav-links a").forEach(link => {
 // Año automático
 document.getElementById("year").textContent = new Date().getFullYear();
 
-// Registro de servicio: genera un correo listo para enviar.
-const form = document.getElementById("serviceForm");
+// Formulario de registro de servicio: genera un correo listo para enviar.
+const form = document.getElementById("quoteForm");
 const status = document.getElementById("formStatus");
 
 form?.addEventListener("submit", (event) => {
@@ -38,7 +38,7 @@ form?.addEventListener("submit", (event) => {
   const message = data.get("message").trim();
 
   if (!name || !phone || !service || !location || !loadType || !weight || !date) {
-    status.textContent = "Completa todos los campos obligatorios para preparar el registro del servicio.";
+    status.textContent = "Completa todos los campos obligatorios para preparar la solicitud.";
     return;
   }
 
@@ -60,7 +60,7 @@ Peso aproximado: ${weight}
 Fecha requerida: ${date}
 
 Detalles adicionales:
-${message || "No se proporcionaron detalles adicionales."}
+${message}
 
 Enviado desde el sitio web de Grúas Fernández.`
   );
