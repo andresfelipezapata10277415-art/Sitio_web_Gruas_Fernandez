@@ -37,7 +37,7 @@ ${details}
 
 Enviado desde el sitio web de Grúas Fernández.`;
 
-  window.serviceEmail={subject:encodeURIComponent(subject),body:encodeURIComponent(body)};
+  window.serviceEmail={subject:encodeURIComponent(subject),body:encodeURIComponent(body),plainBody:body};
   status.textContent="Elige Gmail u Outlook para continuar.";
   modal.classList.add("open");
   modal.setAttribute("aria-hidden","false");
@@ -63,6 +63,10 @@ document.querySelectorAll("[data-target]").forEach(button=>{
       window.location.href=`googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
     } else if(target==="outlook-app"){
       window.location.href=`ms-outlook://compose?to=${to}&subject=${subject}&body=${body}`;
+    } else if(target==="whatsapp"){
+      const whatsappNumber="573216403060";
+      const whatsappMessage=encodeURIComponent(email.plainBody);
+      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,"_blank","noopener,noreferrer");
     }
     closeModal();
   });
