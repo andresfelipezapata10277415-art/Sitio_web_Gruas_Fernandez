@@ -1,49 +1,46 @@
-# Grúas Fernández — Landing Page
+const COMPANY_EMAIL = "gruas.fernandez2026@gmail.com";
 
-Landing page responsive para **Grúas Fernández**, diseñada a partir del logo proporcionado.
+const menu = document.querySelector(".menu");
+const links = document.querySelector(".links");
 
-## Estructura
+menu?.addEventListener("click", () => {
+  const open = links.classList.toggle("open");
+  menu.setAttribute("aria-expanded", open ? "true" : "false");
+});
 
-```text
-gruas-fernandez-landing/
-├── index.html
-├── styles.css
-├── script.js
-├── README.md
-└── assets/
-    └── logo.png
-```
+document.querySelectorAll(".links a").forEach(a => {
+  a.addEventListener("click", () => links.classList.remove("open"));
+});
 
-## Publicar en GitHub Pages
+document.getElementById("year").textContent = new Date().getFullYear();
 
-1. Crea un repositorio en GitHub, por ejemplo `gruas-fernandez`.
-2. Sube todos los archivos manteniendo la estructura de carpetas.
-3. En GitHub entra a **Settings → Pages**.
-4. En **Build and deployment**, selecciona:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. Guarda y espera a que GitHub genere la URL de Pages.
+const form = document.getElementById("serviceForm");
+const status = document.getElementById("status");
 
-## Antes de publicar
+form?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(form);
 
-Abre `script.js` y cambia:
+  const details = (data.get("details") || "").trim() || "Sin detalles adicionales.";
 
-```js
-const COMPANY_EMAIL = "cotizaciones@tudominio.com";
-```
+  const subject = encodeURIComponent(`Registro de servicio — ${data.get("service")}`);
+  const body = encodeURIComponent(
+`Hola, Grúas Fernández.
 
-por el correo real de Grúas Fernández.
+Quiero registrar y agendar un servicio.
 
-El formulario no necesita backend: al enviarlo abre la aplicación de correo del visitante con el mensaje ya preparado.
+Nombre: ${data.get("name")}
+Teléfono: ${data.get("phone")}
+Servicio: ${data.get("service")}
+Ubicación: ${data.get("location")}
+Tipo de carga: ${data.get("load")}
+Peso aproximado: ${data.get("weight")}
+Fecha requerida: ${data.get("date")}
+Detalles adicionales: ${details}
 
-## Personalización
+Enviado desde el sitio web de Grúas Fernández.`
+  );
 
-- **Colores:** las variables principales están al inicio de `styles.css`.
-- **Logo:** reemplaza `assets/logo.png` por la versión definitiva si tienes una con mayor resolución.
-- **Textos:** edita directamente `index.html`.
-- **WhatsApp:** si posteriormente quieres un botón de WhatsApp, añade el número real de la empresa; no se ha inventado uno en esta plantilla.
-
-## Nota
-
-La página está construida sin frameworks ni dependencias de Node, por lo que puede alojarse directamente como un sitio estático en GitHub Pages.
+  status.textContent = "Abriendo tu aplicación de correo…";
+  window.location.href = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
+});
