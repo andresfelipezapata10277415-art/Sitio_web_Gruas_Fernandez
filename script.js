@@ -152,41 +152,30 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
 
 document.querySelectorAll("[data-target]").forEach(button=>{
   button.addEventListener("click",()=>{
-    const email=window.serviceEmail;if(!email)return;
-    const to=encodeURIComponent(COMPANY_EMAIL);
-    const subject=email.subject, body=email.body;
+    const email=window.serviceEmail;
+    if(!email) return;
+
     const target=button.dataset.target;
+    const to=encodeURIComponent(COMPANY_EMAIL);
+    const subject=email.subject;
+    const body=email.body;
 
     if(target==="gmail-web"){
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,"_blank","noopener,noreferrer");
-    } else if(target==="outlook-web"){
-      window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${to}&subject=${subject}&body=${body}`,"_blank","noopener,noreferrer");
-    } else if(target==="gmail-app"){
-      const isAndroid=/Android/i.test(navigator.userAgent);
-
-      if(isAndroid){
-        // Android: usa un Intent explícito hacia la app oficial de Gmail.
-        // Si Gmail no está instalada, abre Gmail Web como respaldo.
-        const gmailWeb=`https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
-        const fallback=encodeURIComponent(gmailWeb);
-
-        const intentUrl=
-          `intent://co?to=${to}&subject=${subject}&body=${body}` +
-          `#Intent;scheme=googlegmail;package=com.google.android.gm;` +
-          `S.browser_fallback_url=${fallback};end`;
-
-        window.location.href=intentUrl;
-      }else{
-        // iOS y otros dispositivos compatibles con el esquema de Gmail.
-        window.location.href=`googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
-      }
-    } else if(target==="outlook-app"){
-      window.location.href=`ms-outlook://compose?to=${to}&subject=${subject}&body=${body}`;
+      window.open(
+        `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
     } else if(target==="whatsapp"){
       const whatsappNumber="573216403060";
       const whatsappMessage=encodeURIComponent(email.plainBody);
-      window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,"_blank","noopener,noreferrer");
+      window.open(
+        `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
     }
+
     closeModal();
   });
 });
