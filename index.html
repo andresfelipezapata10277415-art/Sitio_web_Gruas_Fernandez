@@ -84,8 +84,8 @@
     <form id="serviceForm">
       <label>Nombre *<input name="name" required placeholder="Tu nombre"></label>
       <label>Teléfono *<input name="phone" type="tel" required placeholder="Tu número"></label>
-      <label>Servicio *<select name="service" required><option value="" disabled selected>Selecciona un servicio</option><option>Servicio de grúa</option><option>Carga y transporte</option><option>Asesoría</option></select></label>
-      <div class="location-fields">
+      <label>Servicio *<select name="service" id="serviceSelect" required><option value="" disabled selected>Selecciona un servicio</option><option>Servicio de grúa</option><option>Carga y transporte</option><option>Asesoría</option></select></label>
+      <div class="location-fields" id="locationFields">
         <p class="form-group-title">Ubicación del servicio</p>
         <label>Ciudad/Municipio *<input name="city" required placeholder="Ciudad o municipio"></label>
         <label>Dirección *<input name="address" required placeholder="Calle, carrera, número, etc."></label>
@@ -93,15 +93,6 @@
         <label>Puntos de referencia <em>(Opcional)</em><input name="reference" placeholder="Ej. frente al parque, junto a la estación..."></label>
       </div>
       <div class="load-fields">
-        <p class="form-group-title">Tipo de carga *</p>
-
-        <label>Selecciona el tipo de carga *
-          <select name="loadCategory" id="loadCategory" required>
-            <option value="" disabled selected>Selecciona una opción</option>
-            <option value="Vehículo">Vehículo</option>
-            <option value="Contenedores">Contenedores</option>
-          </select>
-        </label>
 
         <div id="vehicleFields" class="conditional-fields" hidden>
           <label>Tipo de vehículo *
@@ -116,10 +107,32 @@
             <input name="vehicleBrandModel" id="vehicleBrandModel" placeholder="Ej. Toyota Hilux 2022">
           </label>
         </div>
+
+        <div id="cargoFields" class="conditional-fields" hidden>
+          <p class="conditional-title">Especifícanos tu carga</p>
+
+          <label>Tipo de carga *
+            <input name="cargoType" id="cargoType" placeholder="Ej. maquinaria, contenedor, estructura, tanque">
+          </label>
+
+          <label>Medidas <em>(Opcional)</em>
+            <input name="cargoDimensions" id="cargoDimensions" placeholder="Ej. 6 m x 2.5 m x 2.8 m">
+          </label>
+
+          <label>Peso *
+            <input name="cargoWeight" id="cargoWeight" placeholder="Ej. 8 toneladas">
+          </label>
+        </div>
       </div>
-      <label>Peso aproximado *<input name="weight" required placeholder="Ej. 2 toneladas"></label>
-      <label>Fecha requerida *<input name="date" type="date" required></label>
-      <label>Detalles adicionales <em>(Opcional)</em><textarea name="details" rows="4" placeholder="Información adicional"></textarea></label>
+      <label id="generalWeightField">Peso aproximado *<input name="weight" id="generalWeight" required placeholder="Ej. 2 toneladas"></label>
+      <label id="dateField">Fecha requerida *<input name="date" id="serviceDate" type="date" required></label>
+      <label id="detailsField">Detalles adicionales <em>(Opcional)</em><textarea name="details" id="details" rows="4" placeholder="Información adicional"></textarea></label>
+      <div id="advisoryFields" class="conditional-fields advisory-fields" hidden>
+        <p class="conditional-title">Resuelve tus dudas</p>
+        <label>Cuéntanos tu situación *
+          <textarea name="advisorySituation" id="advisorySituation" rows="6" placeholder="Describe brevemente tu necesidad, la carga o vehículo involucrado y cualquier información que consideres importante."></textarea>
+        </label>
+      </div>
       <button class="btn primary full" type="submit">Registrar servicio <b>↗</b></button>
       <p id="status" class="status"></p>
     </form>

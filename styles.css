@@ -12,3 +12,10 @@
 .load-fields{margin:22px 0 4px;padding-top:20px;border-top:1px solid #ffffff18}
 .conditional-fields{margin-top:4px;padding:16px;border:1px solid #ffffff18;border-radius:12px;background:#ffffff05}
 .conditional-fields[hidden]{display:none}
+
+.conditional-title{margin:0 0 16px;color:#fff;font:600 14px "Space Grotesk",sans-serif}
+#generalWeightField[hidden]{display:none}
+
+.location-fields[hidden],#dateField[hidden],#detailsField[hidden],.advisory-fields[hidden]{display:none}
+.advisory-fields{margin:22px 0;padding:20px;border:1px solid #1458ff55;background:#1458ff0b}
+.advisory-fields textarea{min-height:150px;resize:vertical}

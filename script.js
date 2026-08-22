@@ -6,25 +6,95 @@ menu?.addEventListener("click",()=>{const open=links.classList.toggle("open");me
 document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener("click",e=>{const target=document.querySelector(link.getAttribute("href"));if(!target)return;e.preventDefault();target.scrollIntoView({behavior:"smooth"});links?.classList.remove("open")}));
 document.getElementById("year").textContent=new Date().getFullYear();
 
-const loadCategory=document.getElementById("loadCategory");
+const serviceSelect=document.getElementById("serviceSelect");
 const vehicleFields=document.getElementById("vehicleFields");
 const vehicleType=document.getElementById("vehicleType");
 const vehiclePlate=document.getElementById("vehiclePlate");
 const vehicleBrandModel=document.getElementById("vehicleBrandModel");
+const cargoFields=document.getElementById("cargoFields");
+const cargoType=document.getElementById("cargoType");
+const cargoDimensions=document.getElementById("cargoDimensions");
+const cargoWeight=document.getElementById("cargoWeight");
+const generalWeightField=document.getElementById("generalWeightField");
+const generalWeight=document.getElementById("generalWeight");
+const locationFields=document.getElementById("locationFields");
+const city=document.querySelector('[name="city"]');
+const address=document.querySelector('[name="address"]');
+const neighborhood=document.querySelector('[name="neighborhood"]');
+const reference=document.querySelector('[name="reference"]');
+const dateField=document.getElementById("dateField");
+const serviceDate=document.getElementById("serviceDate");
+const detailsField=document.getElementById("detailsField");
+const details=document.getElementById("details");
+const advisoryFields=document.getElementById("advisoryFields");
+const advisorySituation=document.getElementById("advisorySituation");
 
 function updateLoadFields(){
-  const isVehicle=loadCategory?.value==="Vehículo";
-  if(vehicleFields) vehicleFields.hidden=!isVehicle;
+  const selectedService=serviceSelect?.value || "";
+  const craneService=selectedService==="Servicio de grúa";
+  const cargoService=selectedService==="Carga y transporte";
+  const advisoryService=selectedService==="Asesoría";
+
+  // Asesoria usa un formulario simplificado.
+  if(locationFields) locationFields.hidden=advisoryService;
+  [city,address,neighborhood].forEach(field=>{
+    if(field){
+      field.required=!advisoryService;
+      if(advisoryService) field.value="";
+    }
+  });
+  if(reference && advisoryService) reference.value="";
+
+  if(dateField) dateField.hidden=advisoryService;
+  if(serviceDate){
+    serviceDate.required=!advisoryService;
+    if(advisoryService) serviceDate.value="";
+  }
+
+  if(detailsField) detailsField.hidden=advisoryService;
+  if(details && advisoryService) details.value="";
+
+  if(advisoryFields) advisoryFields.hidden=!advisoryService;
+  if(advisorySituation){
+    advisorySituation.required=advisoryService;
+    if(!advisoryService) advisorySituation.value="";
+  }
+
+  // Servicio de grua muestra directamente los datos del vehiculo.
+  if(vehicleFields) vehicleFields.hidden=!craneService;
 
   [vehicleType,vehiclePlate,vehicleBrandModel].forEach(field=>{
     if(field){
-      field.required=isVehicle;
-      if(!isVehicle) field.value="";
+      field.required=craneService;
+      if(!craneService) field.value="";
     }
   });
+
+  // Carga y transporte muestra directamente "Especifícanos tu carga".
+  if(cargoFields) cargoFields.hidden=!cargoService;
+
+  [cargoType,cargoWeight].forEach(field=>{
+    if(field){
+      field.required=cargoService;
+      if(!cargoService) field.value="";
+    }
+  });
+
+  if(cargoDimensions){
+    cargoDimensions.required=false;
+    if(!cargoService) cargoDimensions.value="";
+  }
+
+  // El peso general no aparece en Carga y transporte.
+  if(generalWeightField) generalWeightField.hidden=cargoService || advisoryService;
+  if(generalWeight){
+    generalWeight.required=!cargoService && !advisoryService;
+    generalWeight.disabled=cargoService || advisoryService;
+    if(cargoService || advisoryService) generalWeight.value="";
+  }
 }
 
-loadCategory?.addEventListener("change",updateLoadFields);
+serviceSelect?.addEventListener("change",updateLoadFields);
 updateLoadFields();
 
 const form=document.getElementById("serviceForm");
@@ -44,20 +114,28 @@ Quiero registrar y agendar un servicio.
 Nombre: ${d.get("name")}
 Teléfono: ${d.get("phone")}
 Servicio: ${d.get("service")}
-Ubicación del servicio:
+${d.get("service")==="Asesoría" ? `Resuelve tus dudas:
+${d.get("advisorySituation")}
+` : `Ubicación del servicio:
 Ciudad/Municipio: ${d.get("city")}
 Dirección: ${d.get("address")}
 Barrio/Sector: ${d.get("neighborhood")}
 Puntos de referencia: ${(d.get("reference") || "").trim() || "No especificado"}
-Tipo de carga: ${d.get("loadCategory")}
-${d.get("loadCategory")==="Vehículo" ? `Tipo de vehículo: ${d.get("vehicleType")}
+
+${d.get("service")==="Servicio de grúa" ? `Datos del vehículo:
+Tipo de vehículo: ${d.get("vehicleType")}
 Placas del vehículo: ${d.get("vehiclePlate")}
 Marca y modelo: ${d.get("vehicleBrandModel")}
-` : ""}Peso aproximado: ${d.get("weight")}
-Fecha requerida: ${d.get("date")}
+Peso aproximado: ${d.get("weight")}
+` : d.get("service")==="Carga y transporte" ? `Especifícanos tu carga:
+Tipo de carga: ${d.get("cargoType")}
+Medidas: ${(d.get("cargoDimensions") || "").trim() || "No especificadas"}
+Peso: ${d.get("cargoWeight")}
+` : `Peso aproximado: ${d.get("weight")}
+`}Fecha requerida: ${d.get("date")}
 
 Detalles adicionales:
-${details}
+${details}`}
 
 Enviado desde el sitio web de Grúas Fernández.`;
 
