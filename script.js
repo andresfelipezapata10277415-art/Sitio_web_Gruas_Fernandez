@@ -166,8 +166,8 @@ document.querySelectorAll("[data-target]").forEach(button=>{
         "_blank",
         "noopener,noreferrer"
       );
-    } else if(target==="whatsapp"){
-      const whatsappNumber="573216403060";
+    } else if(target==="whatsapp" || target==="whatsapp-2"){
+      const whatsappNumber=target==="whatsapp-2" ? "573185369744" : "573216403060";
       const whatsappMessage=encodeURIComponent(email.plainBody);
       window.open(
         `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
