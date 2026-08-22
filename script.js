@@ -1,5 +1,5 @@
 const COMPANY_EMAIL = "gruas.fernandez2026@gmail.com";
-const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbz1Cr_1OasiJfQBcQGEIJGG66S9eChNdICLGxQW3M9-6_QuWiMpcKJJbGVCjTp83Wfn/exec";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyAUCWMOH-6nwQwYDrSONyzjGT1HDU1Ujix8YVskBGsXEb8shhptL10N71may0yj1OD/exec";
 
 const menu = document.querySelector(".menu");
 const links = document.querySelector(".links");
@@ -105,43 +105,56 @@ const modal=document.getElementById("emailModal");
 
 function buildSheetsPayload(formData){
   const service=formData.get("service") || "";
-  const isAdvisory=service==="Asesoría";
-  const isCrane=service==="Servicio de grúa";
-  const isCargo=service==="Carga y transporte";
 
-  return {
-    timestamp:new Date().toISOString(),
-    nombre:formData.get("name") || "",
-    telefono:formData.get("phone") || "",
-    servicio:service,
-    ciudad_municipio:isAdvisory ? "" : (formData.get("city") || ""),
-    direccion:isAdvisory ? "" : (formData.get("address") || ""),
-    barrio_sector:isAdvisory ? "" : (formData.get("neighborhood") || ""),
-    puntos_referencia:isAdvisory ? "" : (formData.get("reference") || ""),
-    tipo_vehiculo:isCrane ? (formData.get("vehicleType") || "") : "",
-    placas_vehiculo:isCrane ? (formData.get("vehiclePlate") || "") : "",
-    marca_modelo:isCrane ? (formData.get("vehicleBrandModel") || "") : "",
-    peso_aproximado:isCrane ? (formData.get("weight") || "") : "",
-    tipo_carga:isCargo ? (formData.get("cargoType") || "") : "",
-    medidas:isCargo ? (formData.get("cargoDimensions") || "") : "",
-    peso_carga:isCargo ? (formData.get("cargoWeight") || "") : "",
-    fecha_requerida:isAdvisory ? "" : (formData.get("date") || ""),
-    detalles_adicionales:isAdvisory ? "" : (formData.get("details") || ""),
-    resuelve_tus_dudas:isAdvisory ? (formData.get("advisorySituation") || "") : "",
-    origen:"Sitio web Grúas Fernández"
+  // Los nombres de estas propiedades coinciden con los atributos name=""
+  // del formulario web, para que Apps Script reciba exactamente los campos
+  // con los que fue programado.
+  const payload={
+    name:formData.get("name") || "",
+    phone:formData.get("phone") || "",
+    service:service
   };
+
+  if(service==="Servicio de grúa"){
+    payload.city=formData.get("city") || "";
+    payload.address=formData.get("address") || "";
+    payload.neighborhood=formData.get("neighborhood") || "";
+    payload.reference=formData.get("reference") || "";
+    payload.vehicleType=formData.get("vehicleType") || "";
+    payload.vehiclePlate=formData.get("vehiclePlate") || "";
+    payload.vehicleBrandModel=formData.get("vehicleBrandModel") || "";
+    payload.weight=formData.get("weight") || "";
+    payload.date=formData.get("date") || "";
+    payload.details=formData.get("details") || "";
+  }
+
+  if(service==="Carga y transporte"){
+    payload.city=formData.get("city") || "";
+    payload.address=formData.get("address") || "";
+    payload.neighborhood=formData.get("neighborhood") || "";
+    payload.reference=formData.get("reference") || "";
+    payload.cargoType=formData.get("cargoType") || "";
+    payload.cargoDimensions=formData.get("cargoDimensions") || "";
+    payload.cargoWeight=formData.get("cargoWeight") || "";
+    payload.date=formData.get("date") || "";
+    payload.details=formData.get("details") || "";
+  }
+
+  if(service==="Asesoría"){
+    payload.advisorySituation=formData.get("advisorySituation") || "";
+  }
+
+  return payload;
 }
 
 function sendToGoogleSheets(payload){
-  const params=new URLSearchParams();
-  Object.entries(payload).forEach(([key,value])=>params.set(key,String(value ?? "")));
-  const url=`${GOOGLE_SHEETS_URL}?${params.toString()}`;
-
-  return fetch(url,{
+  return fetch(GOOGLE_SHEETS_URL,{
     method:"POST",
     mode:"no-cors",
     keepalive:true,
-    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    headers:{
+      "Content-Type":"text/plain;charset=utf-8"
+    },
     body:JSON.stringify(payload)
   });
 }
