@@ -1,4 +1,5 @@
 const COMPANY_EMAIL = "gruas.fernandez2026@gmail.com";
+const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbz1Cr_1OasiJfQBcQGEIJGG66S9eChNdICLGxQW3M9-6_QuWiMpcKJJbGVCjTp83Wfn/exec";
 
 const menu = document.querySelector(".menu");
 const links = document.querySelector(".links");
@@ -101,10 +102,59 @@ const form=document.getElementById("serviceForm");
 const status=document.getElementById("status");
 const modal=document.getElementById("emailModal");
 
+
+function buildSheetsPayload(formData){
+  const service=formData.get("service") || "";
+  const isAdvisory=service==="Asesoría";
+  const isCrane=service==="Servicio de grúa";
+  const isCargo=service==="Carga y transporte";
+
+  return {
+    timestamp:new Date().toISOString(),
+    nombre:formData.get("name") || "",
+    telefono:formData.get("phone") || "",
+    servicio:service,
+    ciudad_municipio:isAdvisory ? "" : (formData.get("city") || ""),
+    direccion:isAdvisory ? "" : (formData.get("address") || ""),
+    barrio_sector:isAdvisory ? "" : (formData.get("neighborhood") || ""),
+    puntos_referencia:isAdvisory ? "" : (formData.get("reference") || ""),
+    tipo_vehiculo:isCrane ? (formData.get("vehicleType") || "") : "",
+    placas_vehiculo:isCrane ? (formData.get("vehiclePlate") || "") : "",
+    marca_modelo:isCrane ? (formData.get("vehicleBrandModel") || "") : "",
+    peso_aproximado:isCrane ? (formData.get("weight") || "") : "",
+    tipo_carga:isCargo ? (formData.get("cargoType") || "") : "",
+    medidas:isCargo ? (formData.get("cargoDimensions") || "") : "",
+    peso_carga:isCargo ? (formData.get("cargoWeight") || "") : "",
+    fecha_requerida:isAdvisory ? "" : (formData.get("date") || ""),
+    detalles_adicionales:isAdvisory ? "" : (formData.get("details") || ""),
+    resuelve_tus_dudas:isAdvisory ? (formData.get("advisorySituation") || "") : "",
+    origen:"Sitio web Grúas Fernández"
+  };
+}
+
+function sendToGoogleSheets(payload){
+  const params=new URLSearchParams();
+  Object.entries(payload).forEach(([key,value])=>params.set(key,String(value ?? "")));
+  const url=`${GOOGLE_SHEETS_URL}?${params.toString()}`;
+
+  return fetch(url,{
+    method:"POST",
+    mode:"no-cors",
+    keepalive:true,
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(payload)
+  });
+}
+
 form?.addEventListener("submit",event=>{
   event.preventDefault();
   if(!form.checkValidity()){form.reportValidity();return}
   const d=new FormData(form);
+
+  const sheetsPayload=buildSheetsPayload(d);
+  sendToGoogleSheets(sheetsPayload).catch(error=>{
+    console.error("No se pudo registrar en Google Sheets:",error);
+  });
   const details=(d.get("details")||"").trim()||"Sin detalles adicionales.";
   const subject=`Registro de servicio — ${d.get("service")}`;
   const body=`Hola, Grúas Fernández.
